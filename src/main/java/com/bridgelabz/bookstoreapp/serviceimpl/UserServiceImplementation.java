@@ -44,7 +44,7 @@ public class UserServiceImplementation implements UserService {
 		users.setKyc(userInfoDto.getKyc());
 		userRepository.save(users);
 		String Id = tokenUtils.createToken(users.getUserId());
-		String mailResponse = "http://localhost:3000/verifyemail/" + Id;
+		String mailResponse = "http://localhost:8085/verifyemail/" + Id;
 		MailService.sendEmail(users.getEmail(), "Verification link", mailResponse);
 		return users;
 	}
