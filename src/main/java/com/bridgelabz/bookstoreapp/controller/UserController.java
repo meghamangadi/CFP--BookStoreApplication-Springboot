@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,21 +37,43 @@ public class UserController {
 	public ResponseEntity<Response>registration(@RequestBody RegisterDto registerDto ) throws UserException {
 		Users user= service.register(registerDto);
 		return ResponseEntity.ok()
-				.body(new Response(HttpStatus.ACCEPTED, "USER_REGISTER_SUCESSFULL", user));
+				.body(new Response(HttpStatus.ACCEPTED, "USER_REGISTER_SUCESSFULL", tokenUtils.createToken(user.getUserId())));
 		
 	}
+	 
+	@GetMapping("/verifyemail/{token}")
+	public ResponseEntity<Response> verification(@PathVariable("token") String token) throws UserException {
+
+		boolean user = service.verifyUser(token);
+		return ResponseEntity.ok()
+				.body(new Response(HttpStatus.ACCEPTED, "User already Verified", user));
+	}
+	 
+	@PostMapping("/forgetpassword")
+	public ResponseEntity<Response> forgetPassword(@RequestParam String email) throws UserException {
+		Users user = service.forgetPassword(email);
+		return ResponseEntity.ok().body(new Response(HttpStatus.ACCEPTED, "reset password mail send to email", email));
+
+	}
+	/*@PutMapping("/resetpassword/{token}")
+	public ResponseEntity<Response> resetPassword(@RequestBody ResetPassword password,
+			  @PathVariable("token") String token) throws UserException {
+		 		boolean result = service.resetPassword(password, token);
+		return ResponseEntity.ok()
+				.body(new Response(HttpStatus.ACCEPTED, "Password Reste Successfully..!", result));
+	}*/
 	
 	@PutMapping("/update")
-	public ResponseEntity<Response>update(@RequestParam Long userId, @RequestBody RegisterDto registerDto ) throws UserException {
-		Users user= service.update(userId,registerDto);
+	public ResponseEntity<Response>update(@PathVariable("token") String token, @RequestBody RegisterDto registerDto ) throws UserException {
+		Users user= service.update(token,registerDto);
 		return ResponseEntity.ok()
 				.body(new Response(HttpStatus.ACCEPTED, "USER_REGISTER_SUCESSFULL", user));
 		
 	}
 	
-	@DeleteMapping("/delete")
-	public ResponseEntity<Response>delete(@RequestParam Long userId) throws UserException {
-		Users user= service.delete(userId);
+	@DeleteMapping("/delete/{token}")
+	public ResponseEntity<Response>delete(@PathVariable("token") String token) throws UserException {
+		Users user= service.delete(token);
 		return ResponseEntity.ok()
 				.body(new Response(HttpStatus.ACCEPTED, "USER_DELETED_SUCESSFULL", user));
 		

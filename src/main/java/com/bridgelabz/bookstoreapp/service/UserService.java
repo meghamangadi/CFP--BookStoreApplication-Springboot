@@ -12,10 +12,13 @@ public interface UserService {
 	
 	public Users register( RegisterDto registerDto) throws UserException;
 
-	public Users delete(Long userId) throws UserException  ;
+	public Users delete(String userId) throws UserException  ;
 	
-	public Users update(Long userId, RegisterDto registerDto) throws UserException  ;
+	public Users update(String userId, RegisterDto registerDto) throws UserException  ;
 	public UserResponse login (LoginDto loginDto) throws UserException; ;
-    
+	boolean verifyUser(String token) throws UserException;
+
+	Users forgetPassword(String email) throws UserException;
+
 }
  

@@ -17,6 +17,6 @@ public class RegisterDto {
 	private Date dateOfBirth;
 	private Date  updatedDate;
 	private Date registerDate;
-	private boolean verify;
+	 
 
 }

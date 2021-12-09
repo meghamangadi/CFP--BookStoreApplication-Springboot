@@ -44,7 +44,7 @@ public class UserServiceImplementation implements UserService {
 		users.setKyc(userInfoDto.getKyc());
 		userRepository.save(users);
 		String Id = tokenUtils.createToken(users.getUserId());
-		String mailResponse = "http://localhost:8085/verifyemail/" + Id;
+		String mailResponse = "http://localhost:8085/user/verifyemail/" + Id;
 		MailService.sendEmail(users.getEmail(), "Verification link", mailResponse);
 		return users;
 	}
@@ -56,7 +56,6 @@ public class UserServiceImplementation implements UserService {
 		if (!(loginDto.getPassword()).equals(user.getPassword())) {
 			throw new UserException(HttpStatus.ACCEPTED, "please enter correct email and password ");
 		}
-
 		UserResponse useresponse = new UserResponse();
 		useresponse.setDateOfBirth(user.getDateOfBirth());
 		useresponse.setEmail(user.getEmail());
@@ -64,23 +63,21 @@ public class UserServiceImplementation implements UserService {
 		useresponse.setMobileNumber(user.getMobileNumber());
 		useresponse.setName(user.getName());
 		useresponse.setRegisterDate(user.getRegisterDate());
-		useresponse.setVerify(user.isVerify());
+		useresponse.setVerify(false);
 		useresponse.setUserId(user.getUserId());
 		useresponse.setUpdatedDate(user.getUpdatedDate());
-
 		return useresponse;
 	}
 
 	@Override
-	public Users update(Long userId, RegisterDto userInfoDto) throws UserException {
-
-		Users users = userRepository.findById(userId)
+	public Users update(String userId, RegisterDto userInfoDto) throws UserException {
+		Long Id = tokenUtils.decodeToken(userId);
+		Users users = userRepository.findById(Id)
 				.orElseThrow(() -> new UserException(HttpStatus.NOT_FOUND, "USER_NOT_FOUND_EXCEPTION_MESSAGE"));
 		users.setEmail(userInfoDto.getEmail());
 		users.setMobileNumber(userInfoDto.getMobileNumber());
 		users.setName(userInfoDto.getName());
-		users.setPassword(userInfoDto.getPassword());
-		users.setVerify(userInfoDto.isVerify());
+		users.setPassword(userInfoDto.getPassword());		 
 		users.setDateOfBirth(userInfoDto.getDateOfBirth());
 		users.setRegisterDate(userInfoDto.getRegisterDate());
 		users.setUpdatedDate(userInfoDto.getUpdatedDate());
@@ -91,9 +88,38 @@ public class UserServiceImplementation implements UserService {
 	}
 
 	@Override
-	public Users delete(Long userId) throws UserException {
-		userRepository.deleteById(userId);
+	public Users delete(String userId) throws UserException {
+		Long Id = tokenUtils.decodeToken(userId);				 
+		userRepository.deleteById(Id);
 		return null;
+	}
+
+	@Override
+	public boolean verifyUser(String token) throws UserException {
+		Long Id = tokenUtils.decodeToken(token);
+		Users userInfo = userRepository.findById(Id).orElseThrow(
+				() -> new UserException(HttpStatus.NOT_FOUND,"User Does not exist..!"));
+		if (userInfo.isVerify()!= true) {
+			userInfo.setVerify(true);			 
+			userRepository.save(userInfo);
+			throw new UserException(HttpStatus.ACCEPTED,"User Verification sucessfull");
+		}
+
+		throw new UserException(HttpStatus.BAD_REQUEST,"User already Verified");
+	}
+
+	@Override
+	public Users forgetPassword(String email) throws UserException {
+		Users userMail = userRepository.FindByEmail(email).orElseThrow(
+				() -> new UserException(HttpStatus.NOT_FOUND,"User Does not exist..!"));
+
+		if (userMail.isVerify() == true) {
+			String Id = tokenUtils.createToken(userMail.getUserId());
+			String responsemail = "http://localhost:8085/resetpassword/"+Id;
+			MailService.sendEmail(userMail.getEmail(), "Reset your password", responsemail);
+			return userMail;
+		}
+		throw new UserException(HttpStatus.NOT_FOUND, "User Does not exist..!");
 	}
 
 }
