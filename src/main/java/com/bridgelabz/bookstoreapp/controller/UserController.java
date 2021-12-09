@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.bookstoreapp.dto.LoginDto;
 import com.bridgelabz.bookstoreapp.dto.RegisterDto;
+import com.bridgelabz.bookstoreapp.dto.ResetPassword;
 import com.bridgelabz.bookstoreapp.entity.Users;
 import com.bridgelabz.bookstoreapp.exception.UserException;
 import com.bridgelabz.bookstoreapp.response.Response;
@@ -55,13 +56,13 @@ public class UserController {
 		return ResponseEntity.ok().body(new Response(HttpStatus.ACCEPTED, "reset password mail send to email", email));
 
 	}
-	/*@PutMapping("/resetpassword/{token}")
+	@PutMapping("/resetpassword/{token}")
 	public ResponseEntity<Response> resetPassword(@RequestBody ResetPassword password,
 			  @PathVariable("token") String token) throws UserException {
 		 		boolean result = service.resetPassword(password, token);
 		return ResponseEntity.ok()
 				.body(new Response(HttpStatus.ACCEPTED, "Password Reste Successfully..!", result));
-	}*/
+	}
 	
 	@PutMapping("/update")
 	public ResponseEntity<Response>update(@PathVariable("token") String token, @RequestBody RegisterDto registerDto ) throws UserException {

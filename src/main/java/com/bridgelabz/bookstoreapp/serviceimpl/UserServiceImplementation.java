@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.bridgelabz.bookstoreapp.dto.LoginDto;
 import com.bridgelabz.bookstoreapp.dto.RegisterDto;
+import com.bridgelabz.bookstoreapp.dto.ResetPassword;
 import com.bridgelabz.bookstoreapp.entity.Users;
 import com.bridgelabz.bookstoreapp.exception.UserException;
 import com.bridgelabz.bookstoreapp.repository.UserRepository;
@@ -120,6 +121,18 @@ public class UserServiceImplementation implements UserService {
 			return userMail;
 		}
 		throw new UserException(HttpStatus.NOT_FOUND, "User Does not exist..!");
+	}
+
+	@Override
+	public boolean resetPassword(ResetPassword resetPassword, String token) throws UserException {
+		Long Id = tokenUtils.decodeToken(token);
+		Users user = userRepository.findById(Id).orElseThrow(
+				() -> new UserException(HttpStatus.NOT_FOUND,"User Does not exist.."));
+		if (user.isVerify()) {
+			user.setPassword(resetPassword.getConfirmPassword());
+			userRepository.updateUserPassword(resetPassword.getConfirmPassword(), Id);
+		}
+		return true;
 	}
 
 }
