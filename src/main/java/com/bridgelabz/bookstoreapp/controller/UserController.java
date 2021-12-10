@@ -52,7 +52,7 @@ public class UserController {
 	 
 	@PostMapping("/forgetpassword")
 	public ResponseEntity<Response> forgetPassword(@RequestParam String email) throws UserException {
-		Users user = service.forgetPassword(email);
+		 service.forgetPassword(email);
 		return ResponseEntity.ok().body(new Response(HttpStatus.ACCEPTED, "reset password mail send to email", email));
 
 	}

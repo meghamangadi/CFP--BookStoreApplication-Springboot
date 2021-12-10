@@ -2,7 +2,6 @@ package com.bridgelabz.bookstoreapp.serviceimpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.bookstoreapp.dto.LoginDto;
@@ -21,9 +20,7 @@ public class UserServiceImplementation implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-
-	@Autowired
-	private BCryptPasswordEncoder bcrypt;
+	 
 	@Autowired
 	private TokenUtils tokenUtils;
 
@@ -103,7 +100,7 @@ public class UserServiceImplementation implements UserService {
 		if (userInfo.isVerify()!= true) {
 			userInfo.setVerify(true);			 
 			userRepository.save(userInfo);
-			throw new UserException(HttpStatus.ACCEPTED,"User Verification sucessfull");
+			return true;
 		}
 
 		throw new UserException(HttpStatus.BAD_REQUEST,"User already Verified");
