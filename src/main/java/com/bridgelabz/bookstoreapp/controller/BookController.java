@@ -30,7 +30,7 @@ public class BookController {
 	@Autowired
 	private BookService bookService;
 
-	@PostMapping("/addbook")
+	@PostMapping("/addbook/{token}")
 	public ResponseEntity<Response> addBook(@RequestBody(required = true) BookDto dto , @PathVariable("token") String token ) throws UserException {
 		Book addBook = bookService.addBook(dto , token);
 
@@ -38,7 +38,7 @@ public class BookController {
 
 	}
 	
-	@PutMapping(value = "/updatebook")
+	@PutMapping(value = "/updatebook/{token}")
 	public ResponseEntity<Response> updatebook(@RequestBody(required = true) BookDto dto, @RequestParam Long bookId , @PathVariable("token") String token)
 			throws Exception {
 		Book addBook = bookService.updateBook(bookId, dto, token);
@@ -47,7 +47,7 @@ public class BookController {
 
 	}
 
-	@GetMapping(value = "/getBookById")
+	@GetMapping(value = "/getBookById/{token}")
 	public ResponseEntity<Response> getBook(@RequestParam Long bookId , @PathVariable("token") String token) throws Exception {
 		Book addBook = bookService.displaySingleBook(bookId , token);
 
@@ -61,7 +61,7 @@ public class BookController {
 		return ResponseEntity.ok().body(new Response(HttpStatus.ACCEPTED, "Book retrived successfully", addBook));
 
 	}
-	@DeleteMapping("/delete")
+	@DeleteMapping("/delete/{token}")
 	public ResponseEntity<Response>delete(@RequestParam Long bookId , @PathVariable("token") String token) throws BookException, UserException {
 		Book book= bookService.delete(bookId , token);
 		return ResponseEntity.ok()
