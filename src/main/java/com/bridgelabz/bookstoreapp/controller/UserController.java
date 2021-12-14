@@ -49,7 +49,7 @@ public class UserController {
 		return ResponseEntity.ok()
 				.body(new Response(HttpStatus.ACCEPTED, "User already Verified", user));
 	}
-	 
+	  
 	@PostMapping("/forgetpassword")
 	public ResponseEntity<Response> forgetPassword(@RequestParam String email) throws UserException {
 		 service.forgetPassword(email);

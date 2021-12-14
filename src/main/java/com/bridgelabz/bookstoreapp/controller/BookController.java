@@ -36,7 +36,7 @@ public class BookController {
 
 		return ResponseEntity.ok().body(new Response(HttpStatus.ACCEPTED, "book added  successfully", addBook));
 
-	}
+	} 
 	
 	@PutMapping(value = "/updatebook/{token}")
 	public ResponseEntity<Response> updatebook(@RequestBody(required = true) BookDto dto, @RequestParam Long bookId , @PathVariable("token") String token)
