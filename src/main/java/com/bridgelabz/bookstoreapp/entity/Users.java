@@ -36,10 +36,11 @@ public class Users {
 	@Column
 	@NotNull
 	private Long mobileNumber;	
-	@Column
+	/*@Column
 	@NotNull
 	private String kyc;
-	@Column
+	
+		@Column
 	@NotNull
 	private Date dateOfBirth;
 	@Column
@@ -47,7 +48,7 @@ public class Users {
 	private Date  updatedDate;
 	@Column
 	@NotNull
-	private Date registerDate;
+	private Date registerDate;*/
 	@Column
 	@NotNull
 	private boolean  Verify;

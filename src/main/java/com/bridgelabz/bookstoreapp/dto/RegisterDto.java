@@ -13,10 +13,10 @@ public class RegisterDto {
 	private String email;
 	private String password;
 	private Long mobileNumber;
-	private String kyc;
-	private Date dateOfBirth;
-	private Date  updatedDate;
-	private Date registerDate;
+//	private String kyc;
+//	private Date dateOfBirth;
+//	private Date  updatedDate;
+//	private Date registerDate;
 	 
 
 }

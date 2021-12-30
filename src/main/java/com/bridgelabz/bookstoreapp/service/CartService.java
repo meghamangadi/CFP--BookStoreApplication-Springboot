@@ -11,7 +11,7 @@ public interface CartService {
 	CartBooks addToCart(String token,CartDto cartDTO) throws BookException, UserException;
 
     void deleteFromCart(Long cartId);
-
+    void deleteAll(String token);
     CartBooks updateQuantity(String token, Long cartId, int quantity);
 
     List<CartBooks> findAllInCart(String token);

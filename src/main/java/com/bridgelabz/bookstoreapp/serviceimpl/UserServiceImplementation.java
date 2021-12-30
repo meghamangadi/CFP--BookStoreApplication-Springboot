@@ -36,10 +36,10 @@ public class UserServiceImplementation implements UserService {
 		users.setName(userInfoDto.getName());
 		users.setPassword(userInfoDto.getPassword());
 		users.setVerify(false);
-		users.setDateOfBirth(userInfoDto.getDateOfBirth());
+	/*	users.setDateOfBirth(userInfoDto.getDateOfBirth());
 		users.setRegisterDate(userInfoDto.getRegisterDate());
 		users.setUpdatedDate(userInfoDto.getUpdatedDate());
-		users.setKyc(userInfoDto.getKyc());
+		users.setKyc(userInfoDto.getKyc());*/
 		userRepository.save(users);
 		String Id = tokenUtils.createToken(users.getUserId());
 		String mailResponse = "http://localhost:8085/user/verifyemail/" + Id;
@@ -55,15 +55,15 @@ public class UserServiceImplementation implements UserService {
 			throw new UserException(HttpStatus.ACCEPTED, "please enter correct email and password ");
 		}
 		UserResponse useresponse = new UserResponse();
-		useresponse.setDateOfBirth(user.getDateOfBirth());
+		//useresponse.setDateOfBirth(user.getDateOfBirth());
 		useresponse.setEmail(user.getEmail());
-		useresponse.setKyc(user.getKyc());
+	//	useresponse.setKyc(user.getKyc());
 		useresponse.setMobileNumber(user.getMobileNumber());
 		useresponse.setName(user.getName());
-		useresponse.setRegisterDate(user.getRegisterDate());
+	//	useresponse.setRegisterDate(user.getRegisterDate());
 		useresponse.setVerify(false);
 		useresponse.setUserId(user.getUserId());
-		useresponse.setUpdatedDate(user.getUpdatedDate());
+	//	useresponse.setUpdatedDate(user.getUpdatedDate());
 		return useresponse;
 	}
 
@@ -76,10 +76,10 @@ public class UserServiceImplementation implements UserService {
 		users.setMobileNumber(userInfoDto.getMobileNumber());
 		users.setName(userInfoDto.getName());
 		users.setPassword(userInfoDto.getPassword());		 
-		users.setDateOfBirth(userInfoDto.getDateOfBirth());
+	/*	users.setDateOfBirth(userInfoDto.getDateOfBirth());
 		users.setRegisterDate(userInfoDto.getRegisterDate());
 		users.setUpdatedDate(userInfoDto.getUpdatedDate());
-		users.setKyc(userInfoDto.getKyc());
+		users.setKyc(userInfoDto.getKyc());*/
 		userRepository.save(users);
 		return users;
 

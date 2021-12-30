@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ import com.bridgelabz.bookstoreapp.service.CartService;
 
 @RestController
 @RequestMapping("/cart")
+@CrossOrigin(allowedHeaders = "*", origins = "*")
 public class CartController {
 
     @Autowired
@@ -48,10 +50,20 @@ public class CartController {
 				.body(new Response(HttpStatus.ACCEPTED, "Book deleted from cart successfully ",  cartId));
        
     }
+    
+    @DeleteMapping("/removeAll")
+    ResponseEntity<Response> removeAllFromCart(@RequestHeader(name = "token") String token) {
+        cartService.deleteAll(token);
+        return ResponseEntity.ok()
+				.body(new Response(HttpStatus.ACCEPTED, "Book deleted from cart successfully ",  null));
+       
+    }
 
     @PutMapping("/update/{cartId}/{quantity}")
-    ResponseEntity<Response> updateCart(@RequestHeader(name = "token") String token, @PathVariable("cartId") Long cartId,
+    ResponseEntity<Response> updateCart( @PathVariable("cartId") Long cartId,
                                            @PathVariable("quantity") int quantity) {
+    	 String token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyfQ.GgoSYfqzLaauEcwAguIvHil0HjXsHGC_3sjWmvhrLKU";
+    	   
     	CartBooks cart = cartService.updateQuantity(token, cartId, quantity);
     	   return ResponseEntity.ok()
    				.body(new Response(HttpStatus.ACCEPTED, "Book updated From Cart successfully",  cart));
@@ -66,6 +78,8 @@ public class CartController {
    				.body(new Response(HttpStatus.ACCEPTED, "All Books in Cart fetched for user successfully",  allItemsForUser));
          
     }
+    
+   
 
     @GetMapping("/getAll")
     ResponseEntity<Response> findAllCarts() {

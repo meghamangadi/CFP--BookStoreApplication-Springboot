@@ -50,6 +50,7 @@ public class CartServiceImplementation implements CartService  {
     @Override
     public void deleteFromCart(Long cartId) {
         cartRepo.deleteById(cartId);
+         
     }
 
     @Override
@@ -74,5 +75,19 @@ public class CartServiceImplementation implements CartService  {
         }
         return null;
     }
+
+	@Override
+	public void deleteAll(String token) {
+		Long id = tokenUtil.decodeToken(token);
+        Optional<Users> isPresent = userRepo.findById(id);
+        if(isPresent.isPresent()){
+            cartRepo.deleteAll();
+   
+        }
+       
+		
+	}
+
+ 
 
 }
